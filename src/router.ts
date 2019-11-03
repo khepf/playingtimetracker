@@ -6,6 +6,10 @@ import TopStories from './views/TopStories.vue';
 import CodeExamples from './views/CodeExamples.vue';
 import MyFavorites from './views/MyFavorites.vue';
 
+import Login from './views/Login.vue';
+import Register from './views/Register.vue';
+import Dashboard from './views/Dashboard.vue';
+
 Vue.use(Router);
 
 class RouteMeta {
@@ -37,6 +41,21 @@ const router = new Router({
       name: 'my-favorites',
       component: MyFavorites,
       meta: new RouteMeta({ title: 'Favorites' })
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
     }
   ]
 });

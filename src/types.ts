@@ -23,3 +23,11 @@ export interface RootState {
 export interface TopToolbarState {
   title: string;
 }
+
+// User modules state
+export interface UserState {
+  user: {
+    loggedIn: boolean,
+    data: any
+  };
+}

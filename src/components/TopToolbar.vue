@@ -3,6 +3,36 @@
 
     <v-navigation-drawer app fixed v-model="showMenu">
       <v-list dense>
+
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title><router-link to="login">Login</router-link></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+                <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title><router-link to="register">Register</router-link></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+
+
+
+                <v-list-tile @click.prevent="signOut">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Sign Out</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile @click="">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
@@ -20,6 +50,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+
     </v-navigation-drawer>
 
 
@@ -37,15 +68,28 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
   import { Getter } from 'vuex-class';
+  import { mapGetters } from 'vuex';
+  import firebase from 'firebase';
 
   @Component
   export default class TopToolbar extends Vue {
 
     @Getter('title', {namespace: 'topToolbar'}) title!: string;
+    @Getter('user', {namespace: 'user' }) user: any;
     showMenu: boolean = false;
 
     toggleMenu(): void {
       this.showMenu = !this.showMenu;
+    }
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace({
+            name: 'home'
+          });
+        });
     }
   }
 </script>
