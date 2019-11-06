@@ -4,7 +4,7 @@
     <v-navigation-drawer app fixed v-model="showMenu">
       <v-list dense>
 
-        <v-list-tile @click="">
+        <v-list-tile @click="" v-if="!userLoggedIn">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -24,7 +24,7 @@
 
 
 
-                <v-list-tile @click.prevent="signOut">
+        <v-list-tile @click.prevent="signOut">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -81,15 +81,23 @@
     toggleMenu(): void {
       this.showMenu = !this.showMenu;
     }
+    userLoggedIn () {
+      return this.$store.getters.user;
+    }
     signOut() {
       firebase
         .auth()
         .signOut()
         .then(() => {
           this.$router.replace({
-            name: 'home'
+            name: 'Dashboard'
           });
+          console.log('signed out!');
         });
+    }
+
+    created() {
+      console.log('jmk userLoggedIn', this.$store.getters.user);
     }
   }
 </script>
