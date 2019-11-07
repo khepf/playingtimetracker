@@ -5,35 +5,27 @@
       <v-list dense>
         <v-list-tile @click="">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title><router-link to="/">Home</router-link></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-                <v-list-tile @click="">
+        <v-list-tile @click="">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>sports_soccer</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title><router-link to="register">Register</router-link></v-list-tile-title>
+            <v-list-tile-title><router-link to="/register">Register</router-link></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="">
-          <v-list-tile-action>
-            <v-icon>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title><router-link to="login">Login</router-link></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
                 <v-list-tile @click="">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>sports_soccer</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title><router-link to="register">Register</router-link></v-list-tile-title>
+            <v-list-tile-title><router-link to="/login">Log In</router-link></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -42,12 +34,14 @@
 
         <v-list-tile @click.prevent="signOut">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>logout</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Sign Out</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
+     
 
         <v-list-tile @click="">
           <v-list-tile-action>
