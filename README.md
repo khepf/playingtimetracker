@@ -2,10 +2,9 @@
 
 #### todo list
 
-- unknown action type: fetchUser error in console when creating user
+- unknown action type: fetchUser error in console
 
 - add v-if and v-else to topToolbar
-- get rid of those stupid warnings
 
 - create db in firebase
 - change favicon 

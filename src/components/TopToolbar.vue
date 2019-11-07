@@ -102,12 +102,9 @@
           this.$router.replace({
             name: 'home'
           });
-          console.log('signed out!');
         });
     }
 
-    created() {
-      console.log('jmk userLoggedIn', this.$store.getters.user);
-    }
+
   }
 </script>

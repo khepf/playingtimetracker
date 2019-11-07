@@ -19,13 +19,13 @@
 
 <script>
 export default {
-	name: 'LoginPage',
-	data() {
-		return {
-			showPassword: false
-		}
-	}
+name: 'LoginPage',
+data() {
+  return {
+    showPassword: false
+  };
 }
+};
 </script>
 
 <style></style>

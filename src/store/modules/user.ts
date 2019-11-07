@@ -9,17 +9,17 @@ const state: UserState = {
 };
 
 export const getters: GetterTree<UserState, RootState> = {
-  user: (state) => {
-    return state.user;
+  user: (userModuleState) => {
+    return userModuleState.user;
   }
 };
 
 const mutations: MutationTree<UserState> = {
-  SET_LOGGED_IN(state, value) {
-    state.user.loggedIn = value;
+  SET_LOGGED_IN(userModuleState, value) {
+    userModuleState.user.loggedIn = value;
   },
-  SET_USER(state, data) {
-    state.user.data = data;
+  SET_USER(userModuleState, data) {
+    userModuleState.user.data = data;
   }
 };
 
