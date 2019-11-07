@@ -7,6 +7,5 @@
 - add v-if and v-else to topToolbar
 
 - create db in firebase
-- change favicon 
 - make registration, login pages look good
 - 
