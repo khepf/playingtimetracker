@@ -91,7 +91,7 @@
     toggleMenu(): void {
       this.showMenu = !this.showMenu;
     }
-    userLoggedIn () {
+    userLoggedIn() {
       return this.$store.getters.user;
     }
     signOut() {

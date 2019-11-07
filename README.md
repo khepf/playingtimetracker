@@ -8,5 +8,6 @@
 - get rid of those stupid warnings
 
 - create db in firebase
-- change favicon
-- make home page with playing time tracker icon, login, and register buttons
+- change favicon 
+- make registration, login pages look good
+- 
