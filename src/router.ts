@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from './store/store';
 
+import HomePage from './views/HomePage.vue';
+
 import TopStories from './views/TopStories.vue';
 import CodeExamples from './views/CodeExamples.vue';
 import MyFavorites from './views/MyFavorites.vue';
@@ -26,6 +28,12 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: HomePage,
+      meta: new RouteMeta({ title: 'Playing Time Tracker' })
+    },
+    {
+      path: '/top-stories',
       name: 'top-stories',
       component: TopStories,
       meta: new RouteMeta({ title: 'Playing Time Tracker' })
@@ -45,17 +53,20 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: new RouteMeta({ title: 'Playing Time Tracker' })
     },
     {
       path: '/register',
       name: 'Register',
-      component: Register
+      component: Register,
+      meta: new RouteMeta({ title: 'Playing Time Tracker' })
     },
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: new RouteMeta({ title: 'Playing Time Tracker' })
     }
   ]
 });

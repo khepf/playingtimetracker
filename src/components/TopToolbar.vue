@@ -3,8 +3,24 @@
 
     <v-navigation-drawer app fixed v-model="showMenu">
       <v-list dense>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title><router-link to="/">Home</router-link></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+                <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title><router-link to="register">Register</router-link></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
 
-        <v-list-tile @click="" v-if="!userLoggedIn">
+        <v-list-tile @click="">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -90,7 +106,7 @@
         .signOut()
         .then(() => {
           this.$router.replace({
-            name: 'Dashboard'
+            name: 'home'
           });
           console.log('signed out!');
         });

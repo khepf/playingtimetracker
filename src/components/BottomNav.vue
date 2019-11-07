@@ -2,7 +2,7 @@
 
   <v-bottom-nav app fixed :value="true">
 
-    <v-btn flat color="primary" :to="{ path: '/'}">
+    <v-btn flat color="primary" :to="{ path: 'top-stories'}">
       <span>Top Stories</span>
       <v-icon>thumb_up</v-icon>
     </v-btn>
