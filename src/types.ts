@@ -31,3 +31,13 @@ export interface UserState {
     data: any
   };
 }
+
+// Players modules state
+export interface PlayersState {
+  players: {},
+  player: {
+    firstName: string,
+    lastName: string,
+    jerseyNumber: number
+  }
+}

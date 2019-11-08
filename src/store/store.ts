@@ -4,13 +4,15 @@ import { RootState } from '../types';
 
 import { topToolbar } from './modules/topToolbar';
 import { user } from './modules/user';
+import { players } from './modules/players';
 
 Vue.use(Vuex);
 
 const store: StoreOptions<RootState> = {
   modules: {
     topToolbar,
-    user
+    user,
+    players
   },
 };
 

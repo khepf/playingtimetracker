@@ -1,5 +1,5 @@
 import { ActionTree, Module, MutationTree, GetterTree } from 'vuex';
-import { TopToolbarState, UserState, RootState } from '../../types';
+import { UserState, RootState } from '../../types';
 
 const state: UserState = {
   user: {
