@@ -6,6 +6,6 @@
 
 - add v-if and v-else to topToolbar
 
-- create db in firebase
 - make registration, login pages look good
-- 
+- make admin page
+- continue through messages/players as means of vuex conversion 
