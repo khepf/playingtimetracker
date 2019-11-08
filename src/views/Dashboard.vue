@@ -11,6 +11,7 @@
               <h3>{{ player.firstName }}</h3>
               <h3>{{ player.lastName }}</h3>
               <h3>{{ player.jerseyNumber }}</h3>
+              <a @click.prevent="deletePlayer(player)" href="">delete</a>
             </div>
             <h1>Add a Player</h1>
             <form @submit.prevent="storePlayer">
@@ -32,6 +33,7 @@
             <div v-for="message in messages">
               <h3>{{ message.nickname }}</h3>
               <h3>{{ message.text }}</h3>
+              <a @click.prevent="deleteMessage(message)" href="">delete</a>
             </div>
             <h1>Write a message</h1>
             <form @submit.prevent="storeMessage">
@@ -64,7 +66,7 @@ export default {
     players: [],
     firstName: '',
     lastName: '',
-    jerseyNumber: 0
+    jerseyNumber: ''
     };
   },
   methods: {
@@ -73,6 +75,10 @@ export default {
       database.ref('messages').push({text: this.messageText, nickname: this.nickname});
       this.messageText = '';
       this.nickname = '';
+    },
+    deleteMessage(message) {
+      const database = firebase.database();
+      database.ref('messages').child(message.id).remove();
     },
     storePlayer() {
       const database = firebase.database();
@@ -85,7 +91,11 @@ export default {
       this.firstName = '';
       this.lastName = '';
       this.jerseyNumber = '';
-    }
+    },
+    deletePlayer(player) {
+      const database = firebase.database();
+      database.ref('players').child(player.id).remove();
+    },
   },
   computed: {
   //  map `this.user` to `this.$store.getters.user`
@@ -100,11 +110,22 @@ export default {
   created() {
     const database = firebase.database();
     database.ref('messages').on('child_added', (snapshot) => {
-      this.messages.push(snapshot.val());
+      this.messages.push({...snapshot.val(), id: snapshot.key});
+    });
+    database.ref('messages').on('child_removed', (snapshot) => {
+      const deletedMessage = this.messages.find(message => message.id === snapshot.key);
+      const index = this.messages.indexOf(deletedMessage);
+      this.messages.splice(index, 1);
     });
     database.ref('players').on('child_added', (snapshot) => {
-      this.players.push(snapshot.val());
+      this.players.push({...snapshot.val(), id: snapshot.key});
     });
+    database.ref('players').on('child_removed', (snapshot) => {
+      const deletedPlayer = this.players.find(player => player.id === snapshot.key);
+      const index = this.players.indexOf(deletedPlayer);
+      this.players.splice(index, 1);
+    });
+
   }
 };
 </script>

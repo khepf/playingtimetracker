@@ -8,4 +8,8 @@
 
 - make registration, login pages look good
 - make admin page
+- fix forms layout
 - continue through messages/players as means of vuex conversion 
+
+1. finish crud to firebase
+2. convert to vuex
