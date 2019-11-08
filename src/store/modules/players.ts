@@ -25,11 +25,9 @@ const mutations: MutationTree<PlayersState> = {
 
 export const actions: ActionTree<PlayersState, RootState> = {
   fetchPlayers({ commit }, players) {
-    
     if (players) {
       commit('SET_PLAYERS', {
-        players: players.player,
-    
+        players: players.player
       });
     } else {
       commit('SET_PLAYERS', null);

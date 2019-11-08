@@ -40,7 +40,7 @@ import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 export default {
 
-  data: function() {
+  data: () => {
     return {
     messages: [],
     messageText: '',
@@ -49,7 +49,7 @@ export default {
     firstName: '',
     lastName: '',
     jerseyNumber: 0
-    }
+    };
   },
   methods: {
     storeMessage() {
@@ -75,11 +75,11 @@ export default {
   },
   created() {
     const database = firebase.database();
-    database.ref('messages').on('child_added', snapshot => {
-      this.messages.push(snapshot.val())
+    database.ref('messages').on('child_added', (snapshot) => {
+      this.messages.push(snapshot.val());
     });
-    database.ref('players').on('child_added', snapshot => {
-      this.players.push(snapshot.val())
+    database.ref('players').on('child_added', (snapshot) => {
+      this.players.push(snapshot.val());
     });
   }
 };

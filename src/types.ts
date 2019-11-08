@@ -34,10 +34,10 @@ export interface UserState {
 
 // Players modules state
 export interface PlayersState {
-  players: {},
+  players: {};
   player: {
     firstName: string,
     lastName: string,
     jerseyNumber: number
-  }
+  };
 }
