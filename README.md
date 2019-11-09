@@ -13,3 +13,5 @@
 
 1. finish crud to firebase
 2. convert to vuex
+3. implement proper auth
+4. nested teams/players

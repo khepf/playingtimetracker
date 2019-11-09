@@ -36,19 +36,19 @@
               <h3 v-if="message !== editingMessage">{{ message.text }}</h3>
               <textarea v-else v-model="messageText" class="form-control"></textarea>
               <div v-if="message !== editingMessage">
-                <a @click.prevent="editMessage(message)" href="">edit</a>
-                <a @click.prevent="deleteMessage(message)" href="">delete</a>
+                <v-btn @click.prevent="editMessage(message)" color="info">edit</v-btn>
+                <v-btn @click.prevent="deleteMessage(message)" color="info">delete</v-btn>
               </div>
               <div v-else>
-                <a @click.prevent="cancelEditingMessage" href="">cancel</a>
-                <a @click.prevent="updateMessage" href="">update</a>
+                <v-btn @click.prevent="cancelEditingMessage" color="info">cancel</v-btn>
+                <v-btn @click.prevent="updateMessage" color="info">update</v-btn>
               </div>
 
               
               
             </div>
             <h1>Write a message</h1>
-            <form v-if="!editingMessage" @submit.prevent="storeMessage">
+            <v-form v-if="!editingMessage" @submit.prevent="storeMessage">
               <div class="form-group">
                 <label>Message</label>
                 <input v-model="messageText" class="form-control"/>
@@ -58,7 +58,7 @@
                 <input v-model="nickname" class="form-control"/>
               </div>
               <button>Send</button>
-            </form>
+            </v-form>
           </div>
         </div>
       </div>
