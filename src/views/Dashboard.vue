@@ -11,6 +11,7 @@
               <h3>{{ player.firstName }}</h3>
               <h3>{{ player.lastName }}</h3>
               <h3>{{ player.jerseyNumber }}</h3>
+              <a @click.prevent="editPlayer(player)" href="">edit</a>
               <a @click.prevent="deletePlayer(player)" href="">delete</a>
             </div>
             <h1>Add a Player</h1>
@@ -31,12 +32,23 @@
             </form>
             <h1>List of Messages</h1>
             <div v-for="message in messages">
-              <h3>{{ message.nickname }}</h3>
-              <h3>{{ message.text }}</h3>
-              <a @click.prevent="deleteMessage(message)" href="">delete</a>
+              <h3 v-if="message !== editingMessage">{{ message.nickname }}</h3>
+              <h3 v-if="message !== editingMessage">{{ message.text }}</h3>
+              <textarea v-else v-model="messageText" class="form-control"></textarea>
+              <div v-if="message !== editingMessage">
+                <a @click.prevent="editMessage(message)" href="">edit</a>
+                <a @click.prevent="deleteMessage(message)" href="">delete</a>
+              </div>
+              <div v-else>
+                <a @click.prevent="cancelEditingMessage" href="">cancel</a>
+                <a @click.prevent="updateMessage" href="">update</a>
+              </div>
+
+              
+              
             </div>
             <h1>Write a message</h1>
-            <form @submit.prevent="storeMessage">
+            <form v-if="!editingMessage" @submit.prevent="storeMessage">
               <div class="form-group">
                 <label>Message</label>
                 <input v-model="messageText" class="form-control"/>
@@ -63,13 +75,16 @@ export default {
     messages: [],
     messageText: '',
     nickname: '',
+    editingMessage: null,
     players: [],
     firstName: '',
     lastName: '',
-    jerseyNumber: ''
+    jerseyNumber: '',
+    editingPlayer: null
     };
   },
   methods: {
+    // MESSAGE METHODS
     storeMessage() {
       const database = firebase.database();
       database.ref('messages').push({text: this.messageText, nickname: this.nickname});
@@ -80,6 +95,20 @@ export default {
       const database = firebase.database();
       database.ref('messages').child(message.id).remove();
     },
+    editMessage(message) {
+      this.editingMessage = message;
+      this.messageText = message.text;
+    },
+    cancelEditingMessage() {
+      this.editingMessage = null;
+      this.messageText = '';
+    },
+    updateMessage() {
+      const database = firebase.database();
+      database.ref('messages').child(this.editingMessage.id).update({text: this.messageText});
+      this.cancelEditingMessage();
+    },
+    // PLAYER METHODS
     storePlayer() {
       const database = firebase.database();
       database.ref('players').push(
@@ -104,24 +133,26 @@ export default {
       // players: 'players/players'
     })
   },
-  beforeCreate() {
-    console.log('jmk beforeCreate');
-  },
+
   created() {
     const database = firebase.database();
     database.ref('messages').on('child_added', (snapshot) => {
       this.messages.push({...snapshot.val(), id: snapshot.key});
     });
     database.ref('messages').on('child_removed', (snapshot) => {
-      const deletedMessage = this.messages.find(message => message.id === snapshot.key);
+      const deletedMessage = this.messages.find((message) => message.id === snapshot.key);
       const index = this.messages.indexOf(deletedMessage);
       this.messages.splice(index, 1);
+    });
+    database.ref('messages').on('child_changed', (snapshot) => {
+      const updatedMessage = this.messages.find((message) => message.id === snapshot.key);
+      updatedMessage.text = snapshot.val().text;
     });
     database.ref('players').on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });
     database.ref('players').on('child_removed', (snapshot) => {
-      const deletedPlayer = this.players.find(player => player.id === snapshot.key);
+      const deletedPlayer = this.players.find((player) => player.id === snapshot.key);
       const index = this.players.indexOf(deletedPlayer);
       this.players.splice(index, 1);
     });
