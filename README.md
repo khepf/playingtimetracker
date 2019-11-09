@@ -2,6 +2,7 @@
 
 #### todo list
 
+
 - unknown action type: fetchUser error in console
 
 - add v-if and v-else to topToolbar
@@ -16,6 +17,8 @@
 3. implement proper auth
 4. nested teams/players
 
+- Update Multiple References at Once PROPERLY (nested in a payload variable)
+- Display Notifications when Things Happen
 
 ### Redirect issue with Netlify
 https://medium.com/@lpellis/deploying-vue-with-netlify-from-scratch-28b6c2249081
