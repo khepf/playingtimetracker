@@ -1,21 +1,81 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header"><h1>Dashboard</h1></div>
-          <div class="card-body">
-            <div v-if="user" class="alert alert-success" role="alert">You are logged in!</div>
-            <h1>List of Players</h1>
-            <div v-for="player in players">
-              <h3>{{ player.firstName }}</h3>
-              <h3>{{ player.lastName }}</h3>
-              <h3>{{ player.jerseyNumber }}</h3>
-              <a @click.prevent="editPlayer(player)" href="">edit</a>
-              <a @click.prevent="deletePlayer(player)" href="">delete</a>
+  <v-layout>
+    <v-flex xs12 sm6 offset-sm3>
+      <div v-for="message in messages">
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h3 v-if="message !== editingMessage">{{ message.nickname }}</h3>
+              <h3 v-if="message !== editingMessage">{{ message.text }}</h3>
+              <textarea v-else v-model="messageText" class="form-control"></textarea>
+
             </div>
-            <h1>Add a Player</h1>
-            <form @submit.prevent="storePlayer">
+          </v-card-title>
+
+          <v-card-actions>
+              <div v-if="message !== editingMessage">
+                <v-btn flat @click.prevent="editMessage(message)" color="info">edit</v-btn>
+                <v-btn flat @click.prevent="deleteMessage(message)" color="info">delete</v-btn>
+              </div>
+              <div v-else>
+                <v-btn flat @click.prevent="cancelEditingMessage" color="info">cancel</v-btn>
+                <v-btn flat @click.prevent="updateMessage" color="info">update</v-btn>
+              </div>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div>
+        <v-card>
+          <v-card-title primary-title>
+            <h3>Write a Message</h3>
+          </v-card-title>
+          <v-card-text>
+            <v-form v-if="!editingMessage" @submit.prevent="storeMessage">
+              <div class="form-group">
+                <label>Message</label>
+                <input v-model="messageText" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label>Nickname</label>
+                <input v-model="nickname" class="form-control"/>
+              </div>
+              <button>Send</button>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </div>
+
+      <div v-for="player in players">
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h3 v-if="player !== editingPlayer">{{ player.firstName }}</h3>
+              <h3 v-if="player !== editingPlayer">{{ player.lastName }}</h3>
+              <h3 v-if="player !== editingPlayer">{{ player.jerseyNumber }}</h3>
+              <textarea v-else v-model="firstName" class="form-control"></textarea>
+
+            </div>
+          </v-card-title>
+
+          <v-card-actions>
+              <div v-if="player !== editingPlayer">
+                <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
+                <v-btn flat @click.prevent="deletePlayer(player)" color="info">delete</v-btn>
+              </div>
+              <div v-else>
+                <v-btn flat @click.prevent="cancelEditingPlayer" color="info">cancel</v-btn>
+                <v-btn flat @click.prevent="updatePlayer" color="info">update</v-btn>
+              </div>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div>
+        <v-card>
+          <v-card-title primary-title>
+            <h3>Add a Player</h3>
+          </v-card-title>
+          <v-card-text>
+            <v-form v-if="!editingPlayer" @submit.prevent="storePlayer">
               <div class="form-group">
                 <label>First Name</label>
                 <input v-model="firstName" class="form-control"/>
@@ -28,43 +88,16 @@
                 <label>Jersey Number</label>
                 <input v-model="jerseyNumber" class="form-control"/>
               </div>
-              <button>Send</button>
-            </form>
-            <h1>List of Messages</h1>
-            <div v-for="message in messages">
-              <h3 v-if="message !== editingMessage">{{ message.nickname }}</h3>
-              <h3 v-if="message !== editingMessage">{{ message.text }}</h3>
-              <textarea v-else v-model="messageText" class="form-control"></textarea>
-              <div v-if="message !== editingMessage">
-                <v-btn @click.prevent="editMessage(message)" color="info">edit</v-btn>
-                <v-btn @click.prevent="deleteMessage(message)" color="info">delete</v-btn>
-              </div>
-              <div v-else>
-                <v-btn @click.prevent="cancelEditingMessage" color="info">cancel</v-btn>
-                <v-btn @click.prevent="updateMessage" color="info">update</v-btn>
-              </div>
-
-              
-              
-            </div>
-            <h1>Write a message</h1>
-            <v-form v-if="!editingMessage" @submit.prevent="storeMessage">
-              <div class="form-group">
-                <label>Message</label>
-                <input v-model="messageText" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>Nickname</label>
-                <input v-model="nickname" class="form-control"/>
-              </div>
-              <button>Send</button>
+              <button>Add</button>
             </v-form>
-          </div>
-        </div>
+          </v-card-text>
+        </v-card>
       </div>
-    </div>
-  </div>
+
+    </v-flex>
+  </v-layout>
 </template>
+
 <script>
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
