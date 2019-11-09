@@ -5,10 +5,14 @@
         <v-card>
           <v-card-title primary-title>
             <div>
-              <h3 v-if="message !== editingMessage">{{ message.nickname }}</h3>
-              <h3 v-if="message !== editingMessage">{{ message.text }}</h3>
-              <textarea v-else v-model="messageText" class="form-control"></textarea>
-
+              <div v-if="message !== editingMessage">
+                <h3>{{ message.nickname }}</h3>
+                <h3>{{ message.text }}</h3>
+              </div>
+              <div v-else>
+                <textarea v-model="messageText" class="form-control"></textarea>
+                <textarea v-model="nickname" class="form-control"></textarea>
+              </div>
             </div>
           </v-card-title>
 
@@ -49,10 +53,16 @@
         <v-card>
           <v-card-title primary-title>
             <div>
-              <h3 v-if="player !== editingPlayer">{{ player.firstName }}</h3>
-              <h3 v-if="player !== editingPlayer">{{ player.lastName }}</h3>
-              <h3 v-if="player !== editingPlayer">{{ player.jerseyNumber }}</h3>
-              <textarea v-else v-model="firstName" class="form-control"></textarea>
+              <div v-if="player !== editingPlayer">
+                <h3>{{ player.firstName }}</h3>
+                <h3>{{ player.lastName }}</h3>
+                <h3>{{ player.jerseyNumber }}</h3>
+              </div>
+              <div v-else>
+                <textarea v-model="firstName" class="form-control"></textarea>
+                <textarea v-model="lastName" class="form-control"></textarea>
+                <textarea v-model="jerseyNumber" class="form-control"></textarea>
+              </div>
 
             </div>
           </v-card-title>
@@ -131,14 +141,17 @@ export default {
     editMessage(message) {
       this.editingMessage = message;
       this.messageText = message.text;
+      this.nickname = message.nickname;
     },
     cancelEditingMessage() {
       this.editingMessage = null;
       this.messageText = '';
+      this.nickname = '';
     },
     updateMessage() {
       const database = firebase.database();
       database.ref('messages').child(this.editingMessage.id).update({text: this.messageText});
+      database.ref('messages').child(this.editingMessage.id).update({nickname: this.nickname});
       this.cancelEditingMessage();
     },
     // PLAYER METHODS
@@ -157,6 +170,25 @@ export default {
     deletePlayer(player) {
       const database = firebase.database();
       database.ref('players').child(player.id).remove();
+    },
+    editPlayer(player) {
+      this.editingPlayer = player;
+      this.firstName = player.firstName;
+      this.lastName = player.lastName;
+      this.jerseyNumber = player.jerseyNumber;
+    },
+    cancelEditingPlayer() {
+      this.editingPlayer = null;
+      this.firstName = '';
+      this.lastName = '';
+      this.jerseyNumber = '';
+    },
+    updatePlayer() {
+      const database = firebase.database();
+      database.ref('players').child(this.editingPlayer.id).update({firstName: this.firstName});
+      database.ref('players').child(this.editingPlayer.id).update({lastName: this.lastName});
+      database.ref('players').child(this.editingPlayer.id).update({jerseyNumber: this.jerseyNumber});
+      this.cancelEditingPlayer();
     },
   },
   computed: {
@@ -180,6 +212,7 @@ export default {
     database.ref('messages').on('child_changed', (snapshot) => {
       const updatedMessage = this.messages.find((message) => message.id === snapshot.key);
       updatedMessage.text = snapshot.val().text;
+      updatedMessage.nickname = snapshot.val().nickname;
     });
     database.ref('players').on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
@@ -189,7 +222,12 @@ export default {
       const index = this.players.indexOf(deletedPlayer);
       this.players.splice(index, 1);
     });
-
+    database.ref('players').on('child_changed', (snapshot) => {
+      const updatedPlayer = this.players.find((player) => player.id === snapshot.key);
+      updatedPlayer.firstName = snapshot.val().firstName;
+      updatedPlayer.lastName = snapshot.val().lastName;
+      updatedPlayer.jerseyNumber = snapshot.val().jerseyNumber;
+    });
   }
 };
 </script>

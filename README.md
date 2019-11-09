@@ -15,3 +15,7 @@
 2. convert to vuex
 3. implement proper auth
 4. nested teams/players
+
+
+### Redirect issue with Netlify
+https://medium.com/@lpellis/deploying-vue-with-netlify-from-scratch-28b6c2249081
