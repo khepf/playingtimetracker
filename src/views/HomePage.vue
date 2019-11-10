@@ -1,6 +1,7 @@
   
 <template>
-	<v-card width="400" class="mx-auto mt-5">
+<v-container fluid>
+	<v-card max-width="400" class="mx-auto mt-5">
 		<v-card-title>
 			<v-img contain
         :src="`/images/logo.png`"></v-img>
@@ -15,6 +16,8 @@
 			<v-btn to="/login" color="info">Login</v-btn>
 		</v-card-actions>
 	</v-card>
+</v-container>
+
 </template>
 
 <script>
