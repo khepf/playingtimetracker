@@ -37,7 +37,7 @@
             <v-icon>logout</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Sign Out</v-list-tile-title>
+            <v-list-tile-title @click="signOut">Sign Out</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -95,14 +95,7 @@
       return this.$store.getters.user;
     }
     signOut() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.replace({
-            name: 'home'
-          });
-        });
+      this.$store.dispatch('user/signOut');
     }
 
 

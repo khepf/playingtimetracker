@@ -49,7 +49,44 @@ export const actions: ActionTree<UserState, RootState> = {
         });
       });
   },
-
+  login({ commit }, { email, password }) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        commit('SET_USER', user);
+        commit('SET_LOGGED_IN', true);
+        router.replace({
+          name: 'Dashboard'
+        });
+      })
+      .catch(() => {
+        commit('SET_USER', null);
+        commit('SET_LOGGED_IN', false);
+        router.replace({
+          name: 'Register'
+        });
+      });
+  },
+  signOut({ commit }) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        commit('SET_USER', null);
+        commit('SET_LOGGED_IN', false);
+        router.replace({
+          name: 'Register'
+        });
+      })
+      .catch(() => {
+        commit('SET_USER', null);
+        commit('SET_LOGGED_IN', false);
+        router.replace({
+          name: 'Register'
+        });
+      });
+  },
 
 
 };
