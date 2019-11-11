@@ -22,7 +22,7 @@
               name="password" 
               label="Password" 
               id="password"
-              type="password" 
+              type="password"
               required 
               v-model="form.password" 
               :rules="passwordRules">                            

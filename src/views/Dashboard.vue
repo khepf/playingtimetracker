@@ -5,18 +5,17 @@
       <div v-for="player in players">
         <v-card>
           <v-card-title primary-title>
-            <div>
+            <v-form>
               <div v-if="player !== editingPlayer">
-                <h3>{{ player.firstName }} {{ player.lastName }}</h3>
-                <h3>#{{ player.jerseyNumber }}</h3>
+                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
               </div>
               <div v-else>
-                <textarea v-model="firstName" class="form-control"></textarea>
-                <textarea v-model="lastName" class="form-control"></textarea>
-                <textarea v-model="jerseyNumber" class="form-control"></textarea>
+                <v-text-field v-model="jerseyNumber"></v-text-field>
+                <v-text-field v-model="firstName"></v-text-field>
+                <v-text-field v-model="lastName"></v-text-field>
               </div>
 
-            </div>
+            </v-form>
           </v-card-title>
 
           <v-card-actions>
@@ -39,18 +38,24 @@
           <v-card-text>
             <v-form v-if="!editingPlayer" @submit.prevent="storePlayer">
               <div class="form-group">
-                <label>First Name</label>
-                <input v-model="firstName" class="form-control"/>
+                <v-text-field 
+                v-model="firstName"
+                label="First Name">
+                </v-text-field>
               </div>
               <div class="form-group">
-                <label>Last Name</label>
-                <input v-model="lastName" class="form-control"/>
+                <v-text-field 
+                v-model="lastName"
+                label="Last Name">
+                </v-text-field>
               </div>
               <div class="form-group">
-                <label>Jersey Number</label>
-                <input v-model="jerseyNumber" class="form-control"/>
+                <v-text-field 
+                v-model="jerseyNumber"
+                label="Jersey Number" >
+                </v-text-field>
               </div>
-              <button>Add</button>
+              <v-btn color="primary" type="submit">Add</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
