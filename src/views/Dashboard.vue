@@ -1,13 +1,15 @@
 <template>
-  <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
+<v-container fluid grid-list-lg>
+  <v-layout row wrap>
+    <v-flex xs12>
       <div v-for="message in messages">
         <v-card>
           <v-card-title primary-title>
             <div>
               <div v-if="message !== editingMessage">
-                <h3>{{ message.nickname }}</h3>
                 <h3>{{ message.text }}</h3>
+                <h5>posted by {{ message.nickname }}</h5>
+                
               </div>
               <div v-else>
                 <textarea v-model="messageText" class="form-control"></textarea>
@@ -54,9 +56,8 @@
           <v-card-title primary-title>
             <div>
               <div v-if="player !== editingPlayer">
-                <h3>{{ player.firstName }}</h3>
-                <h3>{{ player.lastName }}</h3>
-                <h3>{{ player.jerseyNumber }}</h3>
+                <h3>{{ player.firstName }} {{ player.lastName }}</h3>
+                <h3>#{{ player.jerseyNumber }}</h3>
               </div>
               <div v-else>
                 <textarea v-model="firstName" class="form-control"></textarea>
@@ -106,6 +107,8 @@
 
     </v-flex>
   </v-layout>
+</v-container>
+
 </template>
 
 <script>
