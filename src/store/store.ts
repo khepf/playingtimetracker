@@ -12,7 +12,7 @@ const store: StoreOptions<RootState> = {
   modules: {
     topToolbar,
     user,
-    players
+    players,
   },
 };
 

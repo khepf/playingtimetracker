@@ -2,55 +2,6 @@
 <v-container fluid grid-list-lg>
   <v-layout row wrap>
     <v-flex xs12>
-      <div v-for="message in messages">
-        <v-card>
-          <v-card-title primary-title>
-            <div>
-              <div v-if="message !== editingMessage">
-                <h3>{{ message.text }}</h3>
-                <h5>posted by {{ message.nickname }}</h5>
-                
-              </div>
-              <div v-else>
-                <textarea v-model="messageText" class="form-control"></textarea>
-                <textarea v-model="nickname" class="form-control"></textarea>
-              </div>
-            </div>
-          </v-card-title>
-
-          <v-card-actions>
-              <div v-if="message !== editingMessage">
-                <v-btn flat @click.prevent="editMessage(message)" color="info">edit</v-btn>
-                <v-btn flat @click.prevent="deleteMessage(message)" color="info">delete</v-btn>
-              </div>
-              <div v-else>
-                <v-btn flat @click.prevent="cancelEditingMessage" color="info">cancel</v-btn>
-                <v-btn flat @click.prevent="updateMessage" color="info">update</v-btn>
-              </div>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div>
-        <v-card>
-          <v-card-title primary-title>
-            <h3>Write a Message</h3>
-          </v-card-title>
-          <v-card-text>
-            <v-form v-if="!editingMessage" @submit.prevent="storeMessage">
-              <div class="form-group">
-                <label>Message</label>
-                <input v-model="messageText" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>Nickname</label>
-                <input v-model="nickname" class="form-control"/>
-              </div>
-              <button>Send</button>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </div>
-
       <div v-for="player in players">
         <v-card>
           <v-card-title primary-title>
@@ -113,15 +64,11 @@
 
 <script>
 import firebase from 'firebase';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
 
   data: () => {
     return {
-    messages: [],
-    messageText: '',
-    nickname: '',
-    editingMessage: null,
     players: [],
     firstName: '',
     lastName: '',
@@ -130,33 +77,6 @@ export default {
     };
   },
   methods: {
-    // MESSAGE METHODS
-    storeMessage() {
-      const database = firebase.database();
-      database.ref('messages').push({text: this.messageText, nickname: this.nickname});
-      this.messageText = '';
-      this.nickname = '';
-    },
-    deleteMessage(message) {
-      const database = firebase.database();
-      database.ref('messages').child(message.id).remove();
-    },
-    editMessage(message) {
-      this.editingMessage = message;
-      this.messageText = message.text;
-      this.nickname = message.nickname;
-    },
-    cancelEditingMessage() {
-      this.editingMessage = null;
-      this.messageText = '';
-      this.nickname = '';
-    },
-    updateMessage() {
-      const database = firebase.database();
-      database.ref('messages').child(this.editingMessage.id).update({text: this.messageText});
-      database.ref('messages').child(this.editingMessage.id).update({nickname: this.nickname});
-      this.cancelEditingMessage();
-    },
     // PLAYER METHODS
     storePlayer() {
       const database = firebase.database();
@@ -204,19 +124,6 @@ export default {
 
   created() {
     const database = firebase.database();
-    database.ref('messages').on('child_added', (snapshot) => {
-      this.messages.push({...snapshot.val(), id: snapshot.key});
-    });
-    database.ref('messages').on('child_removed', (snapshot) => {
-      const deletedMessage = this.messages.find((message) => message.id === snapshot.key);
-      const index = this.messages.indexOf(deletedMessage);
-      this.messages.splice(index, 1);
-    });
-    database.ref('messages').on('child_changed', (snapshot) => {
-      const updatedMessage = this.messages.find((message) => message.id === snapshot.key);
-      updatedMessage.text = snapshot.val().text;
-      updatedMessage.nickname = snapshot.val().nickname;
-    });
     database.ref('players').on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });
