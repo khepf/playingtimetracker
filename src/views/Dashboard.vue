@@ -30,32 +30,39 @@
           </v-card-actions>
         </v-card>
       </div>
+      <v-spacer></v-spacer>
       <div>
         <v-card>
           <v-card-title primary-title>
             <h3>Add a Player</h3>
           </v-card-title>
           <v-card-text>
-            <v-form v-if="!editingPlayer" @submit.prevent="storePlayer">
+            <v-form ref="form" v-if="!editingPlayer">
               <div class="form-group">
-                <v-text-field 
+                <v-text-field
+                name="firstName"
                 v-model="firstName"
                 label="First Name">
                 </v-text-field>
               </div>
               <div class="form-group">
                 <v-text-field 
+                name="lastName"
                 v-model="lastName"
                 label="Last Name">
                 </v-text-field>
               </div>
               <div class="form-group">
-                <v-text-field 
+                <v-text-field
+                name="jerseyNumber"
                 v-model="jerseyNumber"
                 label="Jersey Number" >
                 </v-text-field>
               </div>
-              <v-btn color="primary" type="submit">Add</v-btn>
+              <v-btn 
+              color="primary" 
+              type="submit"
+              @click.prevent="addPlayer()">Add</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -83,14 +90,25 @@ export default {
   },
   methods: {
     // PLAYER METHODS
-    storePlayer() {
-      const database = firebase.database();
-      database.ref('players').push(
-        {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          jerseyNumber: this.jerseyNumber
-        });
+    // storePlayer() {
+    //   const database = firebase.database();
+    //   database.ref('players').push(
+    //     {
+    //       firstName: this.firstName,
+    //       lastName: this.lastName,
+    //       jerseyNumber: this.jerseyNumber
+    //     });
+    //   this.firstName = '';
+    //   this.lastName = '';
+    //   this.jerseyNumber = '';
+    // },
+    addPlayer() {
+      const player = {
+        firstName: this.firstName,
+       lastName: this.lastName,
+      jerseyNumber: this.jerseyNumber
+      };
+      this.$store.dispatch('players/addPlayer', player);
       this.firstName = '';
       this.lastName = '';
       this.jerseyNumber = '';

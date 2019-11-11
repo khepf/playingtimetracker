@@ -1,24 +1,20 @@
-### Soon to be a playing time tracker for soccer
+### A Simple Playing Time Tracker for Soccer
 
 #### todo list
 
 
-- unknown action type: fetchUser error in console
-
 - add v-if and v-else to topToolbar
 
-- make registration, login pages look good
 - make admin page
 
 1. finish crud to firebase DONE
-2. implement proper auth
+2. implement proper auth DONE
 3. convert to vuex
 4. nested teams/players
+5. Link logged in user to individial db
 
 - Update Multiple References at Once PROPERLY (nested in a payload variable)
 - Display Notifications when Things Happen
-
-fix home screen card size to loook right on mobile (too big right now)
 
 ## NOTES
 

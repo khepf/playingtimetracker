@@ -1,5 +1,6 @@
 import { ActionTree, Module, MutationTree, GetterTree } from 'vuex';
 import { PlayersState, RootState } from '../../types';
+import firebase from 'firebase';
 
 const state: PlayersState = {
   players: {},
@@ -24,15 +25,16 @@ const mutations: MutationTree<PlayersState> = {
 };
 
 export const actions: ActionTree<PlayersState, RootState> = {
-  fetchPlayers({ commit }, players) {
-    if (players) {
-      commit('SET_PLAYERS', {
-        players: players.player
+  addPlayer({ state }, payload) {
+    firebase
+      .database()
+      .ref('players')
+      .push({
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        jerseyNumber: payload.jerseyNumber
       });
-    } else {
-      commit('SET_PLAYERS', null);
-    }
-  }
+  },
 };
 
 export const players: Module<PlayersState, RootState> = {
