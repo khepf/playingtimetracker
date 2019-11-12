@@ -12,7 +12,7 @@ const state: PlayersState = {
 };
 
 export const getters: GetterTree<PlayersState, RootState> = {
-  players: (playersModuleState) => {
+  player: (playersModuleState) => {
     return playersModuleState.player;
   }
 };
@@ -35,6 +35,17 @@ export const actions: ActionTree<PlayersState, RootState> = {
         jerseyNumber: payload.jerseyNumber
       });
   },
+  deletePlayer({ state }, playerId) {
+    const database = firebase.database();
+    database.ref('players').child(playerId).remove();
+  },
+  updatePlayer({ state }, player) {
+    firebase.database().ref('players').child(player.id).update({
+      firstName: player.firstName,
+      lastName: player.lastName,
+      jerseyNumber: player.jerseyNumber
+    });
+  }
 };
 
 export const players: Module<PlayersState, RootState> = {

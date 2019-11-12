@@ -17,6 +17,8 @@ export enum ArticleType {
 // Store root state
 export interface RootState {
   topToolbar: TopToolbarState;
+  user: UserState;
+  players: PlayersState;
 }
 
 // Store modules state

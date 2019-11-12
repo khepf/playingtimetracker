@@ -25,7 +25,7 @@
               </div>
               <div v-else>
                 <v-btn flat @click.prevent="cancelEditingPlayer" color="info">cancel</v-btn>
-                <v-btn flat @click.prevent="updatePlayer" color="info">update</v-btn>
+                <v-btn flat @click.prevent="updatePlayer(player)" color="info">update</v-btn>
               </div>
           </v-card-actions>
         </v-card>
@@ -38,21 +38,21 @@
           </v-card-title>
           <v-card-text>
             <v-form ref="form" v-if="!editingPlayer">
-              <div class="form-group">
+              <div>
                 <v-text-field
                 name="firstName"
                 v-model="firstName"
                 label="First Name">
                 </v-text-field>
               </div>
-              <div class="form-group">
+              <div>
                 <v-text-field 
                 name="lastName"
                 v-model="lastName"
                 label="Last Name">
                 </v-text-field>
               </div>
-              <div class="form-group">
+              <div>
                 <v-text-field
                 name="jerseyNumber"
                 v-model="jerseyNumber"
@@ -90,18 +90,6 @@ export default {
   },
   methods: {
     // PLAYER METHODS
-    // storePlayer() {
-    //   const database = firebase.database();
-    //   database.ref('players').push(
-    //     {
-    //       firstName: this.firstName,
-    //       lastName: this.lastName,
-    //       jerseyNumber: this.jerseyNumber
-    //     });
-    //   this.firstName = '';
-    //   this.lastName = '';
-    //   this.jerseyNumber = '';
-    // },
     addPlayer() {
       const player = {
         firstName: this.firstName,
@@ -114,8 +102,8 @@ export default {
       this.jerseyNumber = '';
     },
     deletePlayer(player) {
-      const database = firebase.database();
-      database.ref('players').child(player.id).remove();
+      const playerId = player.id;
+      this.$store.dispatch('players/deletePlayer', playerId);
     },
     editPlayer(player) {
       this.editingPlayer = player;
@@ -129,13 +117,13 @@ export default {
       this.lastName = '';
       this.jerseyNumber = '';
     },
-    updatePlayer() {
-      const database = firebase.database();
-      database.ref('players').child(this.editingPlayer.id).update({firstName: this.firstName});
-      database.ref('players').child(this.editingPlayer.id).update({lastName: this.lastName});
-      database.ref('players').child(this.editingPlayer.id).update({jerseyNumber: this.jerseyNumber});
+    updatePlayer(player) {
+      player.firstName = this.firstName;
+      player.lastName = this.lastName;
+      player.jerseyNumber = this.jerseyNumber;
+      this.$store.dispatch('players/updatePlayer', player);
       this.cancelEditingPlayer();
-    },
+    }
   },
   computed: {
   //  map `this.user` to `this.$store.getters.user`
