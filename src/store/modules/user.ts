@@ -91,14 +91,14 @@ export const actions: ActionTree<UserState, RootState> = {
         commit('SET_USER', null);
         commit('SET_LOGGED_IN', false);
         router.replace({
-          name: 'Register'
+          name: 'home'
         });
       })
       .catch(() => {
         commit('SET_USER', null);
         commit('SET_LOGGED_IN', false);
         router.replace({
-          name: 'Register'
+          name: 'home'
         });
       });
   },
