@@ -161,7 +161,7 @@ export default {
     const userId = firebase.auth().currentUser.uid;
     const userDisplayName = firebase.auth().currentUser.displayName;
     this.getUserProfile();
-    console.log('jmk getUserProfile', this.getUserProfile())
+    console.log('jmk getUserProfile', this.getUserProfile());
     database.ref('users/' + userId).on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });

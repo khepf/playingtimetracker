@@ -34,10 +34,16 @@ export const actions: ActionTree<UserState, RootState> = {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
-        userCredentials.user.updateProfile({
-          displayName: name
-        })
-        alert('Your account has been created');
+        if (userCredentials != null) {
+          userCredentials.user!.updateProfile({
+            displayName: name
+          })
+          alert('Your account has been created');
+        }
+        else {
+          alert('User Credentials have not been supplied');
+        }
+        
       })
       .then((user: any) => {
         commit('SET_USER', user);
