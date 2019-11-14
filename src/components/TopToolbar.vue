@@ -3,7 +3,7 @@
 
     <v-navigation-drawer app fixed v-model="showMenu">
       <v-list dense>
-        <v-list-tile @click="">
+        <v-list-tile v-if="!currentUser">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -11,7 +11,17 @@
             <v-list-tile-title><router-link to="/">Home</router-link></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="">
+
+        <v-list-tile v-if="currentUser">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title><router-link to="/dashboard">Dashboard</router-link></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile v-if="!currentUser">
           <v-list-tile-action>
             <v-icon>sports_soccer</v-icon>
           </v-list-tile-action>
@@ -20,7 +30,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-                <v-list-tile @click="">
+        <v-list-tile v-if="!currentUser">
           <v-list-tile-action>
             <v-icon>sports_soccer</v-icon>
           </v-list-tile-action>
@@ -32,7 +42,7 @@
 
 
 
-        <v-list-tile @click.prevent="signOut">
+        <v-list-tile @click.prevent="signOut" v-if="currentUser">
           <v-list-tile-action>
             <v-icon>logout</v-icon>
           </v-list-tile-action>
@@ -43,7 +53,7 @@
 
      
 
-        <v-list-tile @click="">
+        <v-list-tile v-if="currentUser">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -51,7 +61,7 @@
             <v-list-tile-title>Settings</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="">
+        <v-list-tile v-if="currentUser">
           <v-list-tile-action>
             <v-icon>help</v-icon>
           </v-list-tile-action>
@@ -87,17 +97,20 @@
     @Getter('title', {namespace: 'topToolbar'}) title!: string;
     @Getter('user', {namespace: 'user' }) user: any;
     showMenu: boolean = false;
+    currentUser = firebase.auth().currentUser;
 
     toggleMenu(): void {
       this.showMenu = !this.showMenu;
     }
-    userLoggedIn() {
-      return this.$store.getters.user;
-    }
+    // userLoggedIn() {
+    //   console.log('userLoggedIn', firebase.auth().currentUser);
+    //   return firebase.auth().currentUser;
+    // }
     signOut() {
       this.$store.dispatch('user/signOut');
+      console.log('signOut', firebase.auth().currentUser);
     }
 
-
   }
+
 </script>
