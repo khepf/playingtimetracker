@@ -30,10 +30,12 @@ const mutations: MutationTree<UserState> = {
 };
 
 export const actions: ActionTree<UserState, RootState> = {
-  register({ commit }, { name, email, password }) {
+  register({ commit }, { email, password }) {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password).then(() => {
+        alert('Your account has been created');
+      })
       .then((user: any) => {
         commit('SET_USER', user);
         commit('SET_LOGGED_IN', true);
@@ -41,7 +43,9 @@ export const actions: ActionTree<UserState, RootState> = {
           name: 'Dashboard'
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        alert('Oops. ' + err.message);
+        console.log('err', err);
         commit('SET_USER', null);
         commit('SET_LOGGED_IN', false);
         router.replace({
@@ -54,13 +58,15 @@ export const actions: ActionTree<UserState, RootState> = {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
+        alert('Well done! You are now connected');
         commit('SET_USER', user);
         commit('SET_LOGGED_IN', true);
         router.replace({
           name: 'Dashboard'
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        alert('Oops. ' + err.message);
         commit('SET_USER', null);
         commit('SET_LOGGED_IN', false);
         router.replace({

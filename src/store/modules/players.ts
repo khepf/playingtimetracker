@@ -25,22 +25,28 @@ const mutations: MutationTree<PlayersState> = {
 };
 
 export const actions: ActionTree<PlayersState, RootState> = {
+  
   addPlayer({ state }, payload) {
-    firebase
-      .database()
-      .ref('players')
-      .push({
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        jerseyNumber: payload.jerseyNumber
-      });
+    var user = firebase.auth().currentUser;
+    if (user) {
+      firebase
+        .database()
+        .ref('users').child(user.uid)
+        .push({
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          jerseyNumber: payload.jerseyNumber
+        });
+    }
   },
-  deletePlayer({ state }, playerId) {
+  deletePlayer({ state }, {playerId, userId}) {
+    const user = firebase.auth().currentUser;
     const database = firebase.database();
-    database.ref('players').child(playerId).remove();
+    database.ref('users/' + userId).child(playerId).remove();
   },
-  updatePlayer({ state }, player) {
-    firebase.database().ref('players').child(player.id).update({
+  updatePlayer({ state }, { player, userId }) {
+    var user = firebase.auth().currentUser;
+    firebase.database().ref('users/' + userId).child(player.id).update({
       firstName: player.firstName,
       lastName: player.lastName,
       jerseyNumber: player.jerseyNumber

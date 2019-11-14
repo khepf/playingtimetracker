@@ -2,6 +2,8 @@
 <v-container fluid grid-list-lg>
   <v-layout row wrap>
     <v-flex xs12>
+      <h2 v-if="getUserProfile().displayName">Hello {{ getUserProfile().displayName }}</h2>
+      <h2 v-else>Hello Stranger</h2>
       <div v-for="player in players">
         <v-card>
           <v-card-title primary-title>
@@ -102,8 +104,9 @@ export default {
       this.jerseyNumber = '';
     },
     deletePlayer(player) {
+      const userId = firebase.auth().currentUser.uid;
       const playerId = player.id;
-      this.$store.dispatch('players/deletePlayer', playerId);
+      this.$store.dispatch('players/deletePlayer', {playerId, userId});
     },
     editPlayer(player) {
       this.editingPlayer = player;
@@ -118,12 +121,28 @@ export default {
       this.jerseyNumber = '';
     },
     updatePlayer(player) {
+      const userId = firebase.auth().currentUser.uid;
       player.firstName = this.firstName;
       player.lastName = this.lastName;
       player.jerseyNumber = this.jerseyNumber;
-      this.$store.dispatch('players/updatePlayer', player);
+      this.$store.dispatch('players/updatePlayer', {player, userId});
       this.cancelEditingPlayer();
-    }
+    },
+    // USER METHODS
+    getUserProfile() {
+      const user = firebase.auth().currentUser;
+      var name, email, photoUrl, uid, emailVerified;
+
+      if (user != null) {
+        name = user.displayName;
+        email = user.email;
+        photoUrl = user.photoURL;
+        emailVerified = user.emailVerified;
+        uid = user.uid;  // The user's ID, unique to the Firebase project.
+      }
+      return user;
+    },
+
   },
   computed: {
   //  map `this.user` to `this.$store.getters.user`
@@ -135,15 +154,17 @@ export default {
 
   created() {
     const database = firebase.database();
-    database.ref('players').on('child_added', (snapshot) => {
+    const userId = firebase.auth().currentUser.uid;
+    this.getUserProfile();
+    database.ref('users/' + userId).on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });
-    database.ref('players').on('child_removed', (snapshot) => {
+    database.ref('users/' + userId).on('child_removed', (snapshot) => {
       const deletedPlayer = this.players.find((player) => player.id === snapshot.key);
       const index = this.players.indexOf(deletedPlayer);
       this.players.splice(index, 1);
     });
-    database.ref('players').on('child_changed', (snapshot) => {
+    database.ref('users/' + userId).on('child_changed', (snapshot) => {
       const updatedPlayer = this.players.find((player) => player.id === snapshot.key);
       updatedPlayer.firstName = snapshot.val().firstName;
       updatedPlayer.lastName = snapshot.val().lastName;
