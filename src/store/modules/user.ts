@@ -30,10 +30,13 @@ const mutations: MutationTree<UserState> = {
 };
 
 export const actions: ActionTree<UserState, RootState> = {
-  register({ commit }, { email, password }) {
+  register({ commit }, { email, password, name }) {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password).then(() => {
+      .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
+        userCredentials.user.updateProfile({
+          displayName: name
+        })
         alert('Your account has been created');
       })
       .then((user: any) => {

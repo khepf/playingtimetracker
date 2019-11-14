@@ -2,7 +2,7 @@
 <v-container fluid grid-list-lg>
   <v-layout row wrap>
     <v-flex xs12>
-      <h2 v-if="getUserProfile().displayName">Hello {{ getUserProfile().displayName }}</h2>
+      <h2 v-if="ptuser">Hello {{ ptuser.displayName }} !!!</h2>
       <h2 v-else>Hello Stranger</h2>
       <div v-for="player in players">
         <v-card>
@@ -82,12 +82,15 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
 
   data: () => {
+    const user = firebase.auth().currentUser;
     return {
     players: [],
     firstName: '',
     lastName: '',
     jerseyNumber: '',
-    editingPlayer: null
+    editingPlayer: null,
+    ptuser: user
+
     };
   },
   methods: {
@@ -131,6 +134,7 @@ export default {
     // USER METHODS
     getUserProfile() {
       const user = firebase.auth().currentUser;
+      console.log('user', user)
       var name, email, photoUrl, uid, emailVerified;
 
       if (user != null) {
@@ -155,7 +159,9 @@ export default {
   created() {
     const database = firebase.database();
     const userId = firebase.auth().currentUser.uid;
+    const userDisplayName = firebase.auth().currentUser.displayName;
     this.getUserProfile();
+    console.log('jmk getUserProfile', this.getUserProfile())
     database.ref('users/' + userId).on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });

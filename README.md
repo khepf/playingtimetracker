@@ -6,6 +6,8 @@
 - add v-if and v-else to topToolbar
 
 - make admin page
+- add display name back to user(named upon registration)
+- lock down database rules
 
 1. finish crud to firebase DONE
 2. implement proper auth DONE
