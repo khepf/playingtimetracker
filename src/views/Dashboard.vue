@@ -6,34 +6,34 @@
       <h2 v-else>Hello Stranger</h2>
       <v-spacer></v-spacer>
       <h2>Players</h2>
-      <v-expansion-panel>
-        <v-expansion-panel-content v-for="player in players">
-          <div slot="header">
-              <v-form>
-                <div v-if="player !== editingPlayer">
-                  <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
-                </div>
-                <div v-else>
-                  <v-text-field v-model="jerseyNumber"></v-text-field>
-                  <v-text-field v-model="firstName"></v-text-field>
-                  <v-text-field v-model="lastName"></v-text-field>
-                </div>
+ <div v-for="player in players">
+        <v-card>
+          <v-card-title primary-title>
+            <v-form>
+              <div v-if="player !== editingPlayer">
+                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
+              </div>
+              <div v-else>
+                <v-text-field v-model="jerseyNumber"></v-text-field>
+                <v-text-field v-model="firstName"></v-text-field>
+                <v-text-field v-model="lastName"></v-text-field>
+              </div>
+
             </v-form>
-          </div>
-          <v-card>
-              <v-card-actions>
-                <div v-if="player !== editingPlayer">
-                  <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
-                  <v-btn flat @click.prevent="deletePlayer(player)" color="info">delete</v-btn>
+          </v-card-title>
+
+          <v-card-actions>
+              <div v-if="player !== editingPlayer">
+                <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
+                <v-btn flat @click.prevent="deletePlayer(player)" color="info">delete</v-btn>
               </div>
               <div v-else>
                 <v-btn flat @click.prevent="cancelEditingPlayer" color="info">cancel</v-btn>
                 <v-btn flat @click.prevent="updatePlayer(player)" color="info">update</v-btn>
               </div>
           </v-card-actions>
-      </v-card>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+        </v-card>
+      </div>
 
         <v-expansion-panel class="mt-3">
         <v-expansion-panel-content>
