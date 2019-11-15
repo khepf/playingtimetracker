@@ -1,12 +1,11 @@
 <template>
 <v-container fluid grid-list-lg>
-  <v-layout row wrap>
+  <v-layout column>
     <v-flex xs12>
-      <h4 v-if="ptuser">Signed in as {{ ptuser.email }}</h4>
-      <h2 v-else>Hello Stranger</h2>
-      <v-spacer></v-spacer>
-      <h2>Players</h2>
- <div v-for="player in players">
+      <h4 v-if="ptuser"><em>Signed in as {{ ptuser.email }}</em></h4>
+      <h4 v-else>Hello Stranger</h4>
+      <h3 class="mt-2 text-xs-center">Your Players</h3>
+      <div v-for="player in players" class="mt-2">
         <v-card>
           <v-card-title primary-title>
             <v-form>
@@ -21,7 +20,6 @@
 
             </v-form>
           </v-card-title>
-
           <v-card-actions>
               <div v-if="player !== editingPlayer">
                 <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
@@ -35,7 +33,7 @@
         </v-card>
       </div>
 
-        <v-expansion-panel class="mt-3">
+      <v-expansion-panel class="mt-3">
         <v-expansion-panel-content>
           <div slot="header"><h3>Add a Player</h3></div>
           <v-card>
@@ -68,9 +66,9 @@
               @click.prevent="addPlayer()">Add</v-btn>
             </v-form>
           </v-card-text>
-      </v-card>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-flex>
   </v-layout>
 </v-container>
