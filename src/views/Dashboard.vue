@@ -2,44 +2,45 @@
 <v-container fluid grid-list-lg>
   <v-layout row wrap>
     <v-flex xs12>
-      <h2 v-if="ptuser">Hello {{ ptuser.displayName }} !!!</h2>
+      <h4 v-if="ptuser">Signed in as {{ ptuser.email }}</h4>
       <h2 v-else>Hello Stranger</h2>
-      <div v-for="player in players">
-        <v-card>
-          <v-card-title primary-title>
-            <v-form>
-              <div v-if="player !== editingPlayer">
-                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
-              </div>
-              <div v-else>
-                <v-text-field v-model="jerseyNumber"></v-text-field>
-                <v-text-field v-model="firstName"></v-text-field>
-                <v-text-field v-model="lastName"></v-text-field>
-              </div>
-
+      <v-spacer></v-spacer>
+      <h2>Players</h2>
+      <v-expansion-panel>
+        <v-expansion-panel-content v-for="player in players">
+          <div slot="header">
+              <v-form>
+                <div v-if="player !== editingPlayer">
+                  <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
+                </div>
+                <div v-else>
+                  <v-text-field v-model="jerseyNumber"></v-text-field>
+                  <v-text-field v-model="firstName"></v-text-field>
+                  <v-text-field v-model="lastName"></v-text-field>
+                </div>
             </v-form>
-          </v-card-title>
-
-          <v-card-actions>
-              <div v-if="player !== editingPlayer">
-                <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
-                <v-btn flat @click.prevent="deletePlayer(player)" color="info">delete</v-btn>
+          </div>
+          <v-card>
+              <v-card-actions>
+                <div v-if="player !== editingPlayer">
+                  <v-btn flat @click.prevent="editPlayer(player)" color="info">edit</v-btn>
+                  <v-btn flat @click.prevent="deletePlayer(player)" color="info">delete</v-btn>
               </div>
               <div v-else>
                 <v-btn flat @click.prevent="cancelEditingPlayer" color="info">cancel</v-btn>
                 <v-btn flat @click.prevent="updatePlayer(player)" color="info">update</v-btn>
               </div>
           </v-card-actions>
-        </v-card>
-      </div>
-      <v-spacer></v-spacer>
-      <div>
-        <v-card>
-          <v-card-title primary-title>
-            <h3>Add a Player</h3>
-          </v-card-title>
+      </v-card>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
+
+        <v-expansion-panel class="mt-3">
+        <v-expansion-panel-content>
+          <div slot="header"><h3>Add a Player</h3></div>
+          <v-card>
           <v-card-text>
-            <v-form ref="form" v-if="!editingPlayer">
+            <v-form ref="form">
               <div>
                 <v-text-field
                 name="firstName"
@@ -67,9 +68,9 @@
               @click.prevent="addPlayer()">Add</v-btn>
             </v-form>
           </v-card-text>
-        </v-card>
-      </div>
-
+      </v-card>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
     </v-flex>
   </v-layout>
 </v-container>
@@ -89,7 +90,8 @@ export default {
     lastName: '',
     jerseyNumber: '',
     editingPlayer: null,
-    ptuser: user
+    ptuser: user,
+    tabs: ['Your Teams', 'Your Players']
 
     };
   },
