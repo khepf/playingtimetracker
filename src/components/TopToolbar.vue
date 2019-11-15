@@ -108,7 +108,6 @@
     // }
     signOut() {
       this.$store.dispatch('user/signOut');
-      console.log('signOut', firebase.auth().currentUser);
     }
 
   }

@@ -43,3 +43,12 @@ export interface PlayersState {
     jerseyNumber: number
   };
 }
+
+// Teams modules state
+export interface TeamsState {
+  teams: {};
+  team: {
+    teamName: string,
+    members: string,
+  };
+}

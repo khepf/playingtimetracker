@@ -5,6 +5,7 @@ import { RootState } from '../types';
 import { topToolbar } from './modules/topToolbar';
 import { user } from './modules/user';
 import { players } from './modules/players';
+import { teams } from './modules/teams';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ const store: StoreOptions<RootState> = {
     topToolbar,
     user,
     players,
+    teams
   },
 };
 

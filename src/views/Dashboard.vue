@@ -69,6 +69,67 @@
           </v-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
+
+            <h3 class="mt-2 text-xs-center">Your Teams</h3>
+      <div v-for="team in teams" class="mt-2">
+        <v-card>
+          <v-card-title primary-title>
+            <v-form>
+              <div v-if="team !== editingTeam">
+                <h3> {{ team.teamName }}</h3>
+                <h3>members: {{ team.members }}</h3>
+              </div>
+              <div v-else>
+                <v-text-field v-model="teamName"></v-text-field>
+                <v-text-field v-model="members"></v-text-field>
+              </div>
+
+            </v-form>
+          </v-card-title>
+          <v-card-actions>
+              <div v-if="team !== editingTeam">
+                <v-btn flat @click.prevent="editTeam(team)" color="info">edit</v-btn>
+                <v-btn flat @click.prevent="deleteTeam(team)" color="info">delete</v-btn>
+              </div>
+              <div v-else>
+                <v-btn flat @click.prevent="cancelEditingTeam" color="info">cancel</v-btn>
+                <v-btn flat @click.prevent="updateTeam(team)" color="info">update</v-btn>
+              </div>
+          </v-card-actions>
+        </v-card>
+      </div>
+
+           <v-expansion-panel class="mt-3">
+        <v-expansion-panel-content>
+          <div slot="header"><h3>Add a Team</h3></div>
+          <v-card>
+          <v-card-text>
+            <v-form ref="form">
+              <div>
+                <v-text-field
+                name="teamName"
+                v-model="teamName"
+                label="Team Name">
+                </v-text-field>
+              </div>
+              <div>
+                <v-text-field 
+                name="members"
+                v-model="members"
+                label="Members">
+                </v-text-field>
+              </div>
+              <div>
+              </div>
+              <v-btn 
+              color="primary" 
+              type="submit"
+              @click.prevent="addTeam()">Add</v-btn>
+            </v-form>
+          </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-flex>
   </v-layout>
 </v-container>
@@ -83,14 +144,16 @@ export default {
   data: () => {
     const user = firebase.auth().currentUser;
     return {
-    players: [],
-    firstName: '',
-    lastName: '',
-    jerseyNumber: '',
-    editingPlayer: null,
-    ptuser: user,
-    tabs: ['Your Teams', 'Your Players']
-
+      teams: [],
+      teamName: '',
+      members: '',
+      players: [],
+      firstName: '',
+      lastName: '',
+      jerseyNumber: '',
+      editingPlayer: null,
+      editingTeam: null,
+      ptuser: user
     };
   },
   methods: {
@@ -131,10 +194,44 @@ export default {
       this.$store.dispatch('players/updatePlayer', {player, userId});
       this.cancelEditingPlayer();
     },
+    // TEAM METHODS
+    addTeam() {
+      const team = {
+        teamName: this.teamName,
+        members: this.members
+      };
+      this.$store.dispatch('teams/addTeam', team);
+      this.teamName = '';
+      this.members = '';
+    },
+    deleteTeam(team) {
+      const userId = firebase.auth().currentUser.uid;
+      const teamId = team.id;
+      this.$store.dispatch('teams/deleteTeam', {teamId, userId});
+    },
+    editTeam(team) {
+      this.editingTeam = team;
+      this.teamName = team.teamName;
+      this.members = team.members;
+    },
+    cancelEditingTeam() {
+      this.editingTeam = null;
+      this.teamName = '';
+      this.members = '';
+    },
+    updateTeam(team) {
+      const userId = firebase.auth().currentUser.uid;
+      team.teamName = this.teamName;
+      team.members = this.members;
+      this.$store.dispatch('teams/updateTeam', {team, userId});
+      this.cancelEditingTeam();
+    },
+
+
+
     // USER METHODS
     getUserProfile() {
       const user = firebase.auth().currentUser;
-      console.log('user', user)
       var name, email, photoUrl, uid, emailVerified;
 
       if (user != null) {
@@ -161,20 +258,33 @@ export default {
     const userId = firebase.auth().currentUser.uid;
     const userDisplayName = firebase.auth().currentUser.displayName;
     this.getUserProfile();
-    console.log('jmk getUserProfile', this.getUserProfile());
-    database.ref('users/' + userId).on('child_added', (snapshot) => {
+    database.ref('users/' + userId + '/players').on('child_added', (snapshot) => {
       this.players.push({...snapshot.val(), id: snapshot.key});
     });
-    database.ref('users/' + userId).on('child_removed', (snapshot) => {
+    database.ref('users/' + userId + '/players').on('child_removed', (snapshot) => {
       const deletedPlayer = this.players.find((player) => player.id === snapshot.key);
       const index = this.players.indexOf(deletedPlayer);
       this.players.splice(index, 1);
     });
-    database.ref('users/' + userId).on('child_changed', (snapshot) => {
+    database.ref('users/' + userId + '/players').on('child_changed', (snapshot) => {
       const updatedPlayer = this.players.find((player) => player.id === snapshot.key);
       updatedPlayer.firstName = snapshot.val().firstName;
       updatedPlayer.lastName = snapshot.val().lastName;
       updatedPlayer.jerseyNumber = snapshot.val().jerseyNumber;
+    });
+
+    database.ref('users/' + userId + '/teams').on('child_added', (snapshot) => {
+      this.teams.push({...snapshot.val(), id: snapshot.key});
+    });
+    database.ref('users/' + userId + '/teams').on('child_removed', (snapshot) => {
+      const deletedTeam = this.teams.find((team) => team.id === snapshot.key);
+      const index = this.teams.indexOf(deletedTeam);
+      this.teams.splice(index, 1);
+    });
+    database.ref('users/' + userId + '/teams').on('child_changed', (snapshot) => {
+      const updatedTeam = this.teams.find((team) => team.id === snapshot.key);
+      updatedTeam.teamName = snapshot.val().teamName;
+      updatedTeam.members = snapshot.val().members;
     });
   }
 };
