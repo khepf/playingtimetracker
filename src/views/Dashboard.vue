@@ -10,12 +10,17 @@
           <v-card-title primary-title>
             <v-form>
               <div v-if="player !== editingPlayer">
-                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }}</h3>
+                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }} - {{ player.teamName}}</h3>
               </div>
               <div v-else>
                 <v-text-field v-model="jerseyNumber"></v-text-field>
                 <v-text-field v-model="firstName"></v-text-field>
                 <v-text-field v-model="lastName"></v-text-field>
+                <v-select                  
+                  :items="teams"
+                  item-text="teamName"
+                  label="Select Team">
+                </v-select>
               </div>
 
             </v-form>
@@ -60,6 +65,15 @@
                 label="Jersey Number" >
                 </v-text-field>
               </div>
+              <div>
+                <v-select
+                  
+                  :items="teams"
+                  v-model="teamName"
+                  item-text="teamName"
+                  label="Select Team">
+                </v-select>
+              </div>
               <v-btn 
               color="primary" 
               type="submit"
@@ -99,7 +113,7 @@
         </v-card>
       </div>
 
-           <v-expansion-panel class="mt-3">
+      <v-expansion-panel class="mt-3">
         <v-expansion-panel-content>
           <div slot="header"><h3>Add a Team</h3></div>
           <v-card>
@@ -139,10 +153,12 @@
 <script>
 import firebase from 'firebase';
 import { mapGetters, mapActions } from 'vuex';
+
 export default {
 
   data: () => {
     const user = firebase.auth().currentUser;
+    const userId = firebase.auth().currentUser.uid;
     return {
       teams: [],
       teamName: '',
@@ -162,7 +178,8 @@ export default {
       const player = {
         firstName: this.firstName,
        lastName: this.lastName,
-      jerseyNumber: this.jerseyNumber
+      jerseyNumber: this.jerseyNumber,
+      teamName: this.teamName
       };
       this.$store.dispatch('players/addPlayer', player);
       this.firstName = '';
@@ -179,6 +196,7 @@ export default {
       this.firstName = player.firstName;
       this.lastName = player.lastName;
       this.jerseyNumber = player.jerseyNumber;
+      this.teamName = player.teamName;
     },
     cancelEditingPlayer() {
       this.editingPlayer = null;
@@ -191,6 +209,7 @@ export default {
       player.firstName = this.firstName;
       player.lastName = this.lastName;
       player.jerseyNumber = this.jerseyNumber;
+      player.teamName = this.teamName;
       this.$store.dispatch('players/updatePlayer', {player, userId});
       this.cancelEditingPlayer();
     },
@@ -271,6 +290,7 @@ export default {
       updatedPlayer.firstName = snapshot.val().firstName;
       updatedPlayer.lastName = snapshot.val().lastName;
       updatedPlayer.jerseyNumber = snapshot.val().jerseyNumber;
+      updatedPlayer.teamName = snapshot.val().teamName;
     });
 
     database.ref('users/' + userId + '/teams').on('child_added', (snapshot) => {

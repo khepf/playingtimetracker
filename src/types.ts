@@ -40,7 +40,8 @@ export interface PlayersState {
   player: {
     firstName: string,
     lastName: string,
-    jerseyNumber: number
+    jerseyNumber: number,
+    teamName: string
   };
 }
 
