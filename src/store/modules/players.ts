@@ -8,7 +8,7 @@ const state: PlayersState = {
     firstName: '',
     lastName: '',
     jerseyNumber: 0,
-    teamName: ''
+    playerTeams: []
   }
 };
 
@@ -37,7 +37,7 @@ export const actions: ActionTree<PlayersState, RootState> = {
           firstName: payload.firstName,
           lastName: payload.lastName,
           jerseyNumber: payload.jerseyNumber,
-          teamName: payload.teamName
+          teams: payload.playerTeams
         });
     }
   },
@@ -52,7 +52,7 @@ export const actions: ActionTree<PlayersState, RootState> = {
       firstName: player.firstName,
       lastName: player.lastName,
       jerseyNumber: player.jerseyNumber,
-      teamName: player.teamName
+      teams: player.playerTeams
     });
   }
 };

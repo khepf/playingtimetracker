@@ -10,7 +10,7 @@
           <v-card-title primary-title>
             <v-form>
               <div v-if="player !== editingPlayer">
-                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }} - {{ player.teamName}}</h3>
+                <h3>#{{ player.jerseyNumber }} {{ player.firstName }} {{ player.lastName }} - {{ player.playerTeams}}</h3>
               </div>
               <div v-else>
                 <v-text-field v-model="jerseyNumber"></v-text-field>
@@ -69,7 +69,7 @@
                 <v-select
                   
                   :items="teams"
-                  v-model="teamName"
+                  v-model="playerTeams"
                   item-text="teamName"
                   label="Select Team">
                 </v-select>
@@ -91,11 +91,11 @@
             <v-form>
               <div v-if="team !== editingTeam">
                 <h3> {{ team.teamName }}</h3>
-                <h3>members: {{ team.members }}</h3>
+                <h3>players: {{ team.teamplayers }}</h3>
               </div>
               <div v-else>
                 <v-text-field v-model="teamName"></v-text-field>
-                <v-text-field v-model="members"></v-text-field>
+                <v-text-field v-model="teamPlayers"></v-text-field>
               </div>
 
             </v-form>
@@ -128,9 +128,9 @@
               </div>
               <div>
                 <v-text-field 
-                name="members"
-                v-model="members"
-                label="Members">
+                name="teamPlayers"
+                v-model="teamPlayers"
+                label="Players">
                 </v-text-field>
               </div>
               <div>
@@ -161,12 +161,13 @@ export default {
     const userId = firebase.auth().currentUser.uid;
     return {
       teams: [],
-      teamName: '',
-      members: '',
       players: [],
+      teamName: '',
+      teamPlayers: [],
       firstName: '',
       lastName: '',
       jerseyNumber: '',
+      playerTeams: [],
       editingPlayer: null,
       editingTeam: null,
       ptuser: user
@@ -177,14 +178,15 @@ export default {
     addPlayer() {
       const player = {
         firstName: this.firstName,
-       lastName: this.lastName,
-      jerseyNumber: this.jerseyNumber,
-      teamName: this.teamName
+        lastName: this.lastName,
+        jerseyNumber: this.jerseyNumber,
+        teams: this.playerTeams
       };
       this.$store.dispatch('players/addPlayer', player);
       this.firstName = '';
       this.lastName = '';
       this.jerseyNumber = '';
+      this.playerTeams = '';
     },
     deletePlayer(player) {
       const userId = firebase.auth().currentUser.uid;
@@ -196,20 +198,21 @@ export default {
       this.firstName = player.firstName;
       this.lastName = player.lastName;
       this.jerseyNumber = player.jerseyNumber;
-      this.teamName = player.teamName;
+      this.playerTeams = player.teams;
     },
     cancelEditingPlayer() {
       this.editingPlayer = null;
       this.firstName = '';
       this.lastName = '';
       this.jerseyNumber = '';
+      this.playerTeams = '';
     },
     updatePlayer(player) {
       const userId = firebase.auth().currentUser.uid;
       player.firstName = this.firstName;
       player.lastName = this.lastName;
       player.jerseyNumber = this.jerseyNumber;
-      player.teamName = this.teamName;
+      player.teams = this.playerTeams;
       this.$store.dispatch('players/updatePlayer', {player, userId});
       this.cancelEditingPlayer();
     },
@@ -217,11 +220,11 @@ export default {
     addTeam() {
       const team = {
         teamName: this.teamName,
-        members: this.members
+        players: this.teamPlayers
       };
       this.$store.dispatch('teams/addTeam', team);
       this.teamName = '';
-      this.members = '';
+      this.teamPlayers = '';
     },
     deleteTeam(team) {
       const userId = firebase.auth().currentUser.uid;
@@ -231,17 +234,17 @@ export default {
     editTeam(team) {
       this.editingTeam = team;
       this.teamName = team.teamName;
-      this.members = team.members;
+      this.teamPlayers = team.players;
     },
     cancelEditingTeam() {
       this.editingTeam = null;
       this.teamName = '';
-      this.members = '';
+      this.teamPlayers = '';
     },
     updateTeam(team) {
       const userId = firebase.auth().currentUser.uid;
       team.teamName = this.teamName;
-      team.members = this.members;
+      team.players = this.teamPlayers;
       this.$store.dispatch('teams/updateTeam', {team, userId});
       this.cancelEditingTeam();
     },
@@ -290,7 +293,7 @@ export default {
       updatedPlayer.firstName = snapshot.val().firstName;
       updatedPlayer.lastName = snapshot.val().lastName;
       updatedPlayer.jerseyNumber = snapshot.val().jerseyNumber;
-      updatedPlayer.teamName = snapshot.val().teamName;
+      updatedPlayer.playerTeams = snapshot.val().teams;
     });
 
     database.ref('users/' + userId + '/teams').on('child_added', (snapshot) => {
@@ -304,7 +307,7 @@ export default {
     database.ref('users/' + userId + '/teams').on('child_changed', (snapshot) => {
       const updatedTeam = this.teams.find((team) => team.id === snapshot.key);
       updatedTeam.teamName = snapshot.val().teamName;
-      updatedTeam.members = snapshot.val().members;
+      updatedTeam.teamPlayers = snapshot.val().players;
     });
   }
 };

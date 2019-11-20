@@ -6,7 +6,7 @@ const state: TeamsState = {
   teams: {},
   team: {
     teamName: '',
-    members: ''
+    teamPlayers: []
   }
 };
 
@@ -33,7 +33,7 @@ export const actions: ActionTree<TeamsState, RootState> = {
         .ref('users').child(user.uid).child('teams')
         .push({
           teamName: payload.teamName,
-          members: payload.members,
+          players: payload.teamPlayers,
         });
     }
   },
@@ -46,7 +46,7 @@ export const actions: ActionTree<TeamsState, RootState> = {
     var user = firebase.auth().currentUser;
     firebase.database().ref('users/' + userId).child('teams').child(team.id).update({
       teamName: team.teamName,
-      members: team.members,
+      players: team.teamPlayers,
     });
   }
 };

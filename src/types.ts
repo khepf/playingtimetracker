@@ -41,7 +41,7 @@ export interface PlayersState {
     firstName: string,
     lastName: string,
     jerseyNumber: number,
-    teamName: string
+    playerTeams: string[]
   };
 }
 
@@ -50,6 +50,6 @@ export interface TeamsState {
   teams: {};
   team: {
     teamName: string,
-    members: string,
+    teamPlayers: string[],
   };
 }
